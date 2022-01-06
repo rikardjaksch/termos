@@ -1,7 +1,8 @@
 set(KERNEL_SOURCES
     boot/boot.S
     entry_point.cpp
-    vga.cpp)
+    vga.cpp
+    io.cpp)
 
 set(SOURCES
     ${KERNEL_SOURCES}
