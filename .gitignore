@@ -2,3 +2,4 @@ build/
 cross_compiler/bin
 cross_compiler/build
 cross_compiler/tarballs
+cross_compiler/patches
