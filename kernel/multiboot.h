@@ -6,7 +6,7 @@
 #define MULTIBOOT_VIDEO_MODE    (1 << 3)
 
 #if !defined(ASM_FILE)
-#include <kernel/types.h>
+#include <kernel/klibc/stdint.h>
 
 #define CHECK_MULTI_BOOT_FLAG(flags, bit) ((flags) & (1 << (bit)))
 

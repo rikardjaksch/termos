@@ -1,5 +1,7 @@
 #include <kernel/kprintf.h>
-#include <kernel/kstdlib.h>
+#include <kernel/klibc/stdint.h>
+#include <kernel/klibc/stdlib.h>
+#include <kernel/klibc/stdbool.h>
 
 static const char* _hex_digits_lower = "0123456789abcdef";
 static const char* _hex_digits_upper = "0123456789ABCDEF";

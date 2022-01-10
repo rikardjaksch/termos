@@ -1,6 +1,6 @@
 #pragma once
 
-#include <kernel/types.h>
+#include <kernel/klibc/stdarg.h>
 
 /*
 https://github.com/mpaland/printf/blob/master/printf.h

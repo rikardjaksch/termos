@@ -1,5 +1,8 @@
 #include <kernel/i386.h>
 #include <kernel/vga.h>
+#include <kernel/klibc/stdlib.h>
+
+// https://github.com/ozkl/soso/blob/2839f6f9aaa633553a26818dd5e02c0f3ddea545/kernel/interrupt.asm
 
 union descriptor {
     struct {
@@ -34,11 +37,13 @@ static descriptor_table_pointer_t idtr;
 static descriptor_t gdt_descriptors[5];
 static descriptor_t idt_descriptors[256];
 
+#define IH
+
 // Generic exception handler
 #define EH(i, msg) \
     static void _exception ## i () \
     { \
-        vga_printf("Unhandled interrupt\n"); \
+        vga_printf("Unhandled interrupt %d\n", i); \
         asm volatile("cli; hlt"); \
     }
 
@@ -104,8 +109,12 @@ void gdt_init() {
         "mov %%ax, %%ds\n"
         "mov %%ax, %%es\n"
         "mov %%ax, %%fs\n"
-        "mov %%ax, %%ss\n" ::"a"(0x10)
-        : "memory");
+        "mov %%ax, %%gs\n"
+        "mov %%ax, %%ss\n" :: "a"(0x10) : "memory");
+
+      asm volatile(
+        "ljmpl $0x08, $sanity\n"
+        "sanity:\n");
 }
 
 void register_interrupt_handler(uint8_t isr_number, void(*f)()) {
@@ -113,8 +122,8 @@ void register_interrupt_handler(uint8_t isr_number, void(*f)()) {
     
     desc->gate.zero = 0;
     desc->gate.selector = 0x8;
-    desc->gate.offset_low = ((uint32_t)f & 0x0000ffff);
-    desc->gate.offset_high = ((uint32_t)f & 0xffff0000);
+    desc->gate.offset_low = ((uint32_t)f & 0xffff);
+    desc->gate.offset_high = ((uint32_t)f >> 16);
     desc->gate.type_attributes = 0x8e;
 
     flush_idt();

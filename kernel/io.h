@@ -1,6 +1,6 @@
 #pragma once
 
-#include <kernel/types.h>
+#include <kernel/klibc/stdint.h>
 
 uint8_t io_in8(uint16_t port);
 uint16_t io_in16(uint16_t port);

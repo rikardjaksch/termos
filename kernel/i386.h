@@ -1,6 +1,6 @@
 #pragma once
 
-#include <kernel/types.h>
+#include <kernel/klibc/stdint.h>
 
 #define cli() asm volatile("cli")
 #define sti() asm volatile("sti")

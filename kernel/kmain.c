@@ -40,8 +40,8 @@ void kernel_main() {
     }
 
     sti();
-
-    asm("int $10");
+    
+    vga_printf("After sti()");
 
     for (;;) {
         asm("hlt");

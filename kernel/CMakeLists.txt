@@ -1,14 +1,18 @@
 set(KERNEL_SOURCES
     boot/boot.S
     kmain.c
-    kstdlib.c
     kprintf.c
     vga.c
     io.c
-    i386.c)
+    i386.c
+    i386.S)
+
+set(KLIB_SOURCES
+    klibc/stdlib.c)
 
 set(SOURCES
     ${KERNEL_SOURCES}
+    ${KLIB_SOURCES}
 )
 
 add_executable(kernel ${SOURCES})
