@@ -1,3 +1,4 @@
+.vscode/
 build/
 cross_compiler/bin
 cross_compiler/build

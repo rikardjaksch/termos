@@ -3,6 +3,11 @@
 build:
 	ninja -C build
 
-run:
-	qemu-system-i386.exe -kernel build/kernel/kernel -debugcon stdio
+run: build
+	qemu-system-i386.exe \
+	-kernel build/kernel/kernel \
+	-debugcon stdio \
+	-m 256M \
+	-cpu max \
+	-device VGA,vgamem_mb=64
 

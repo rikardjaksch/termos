@@ -1,9 +1,11 @@
 set(KERNEL_SOURCES
     boot/boot.S
     kmain.c
+    kstdlib.c
+    kprintf.c
     vga.c
     io.c
-    kprintf.c)
+    i386.c)
 
 set(SOURCES
     ${KERNEL_SOURCES}

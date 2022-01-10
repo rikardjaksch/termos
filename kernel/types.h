@@ -12,8 +12,11 @@ typedef __INT8_TYPE__  int8_t;
 
 typedef __SIZE_TYPE__ size_t;
 
-typedef __builtin_va_list va_list;
+typedef _Bool bool;
+#define true (bool)1;
+#define false (bool)0;
 
+typedef __builtin_va_list va_list;
 #define va_start(v, l) __builtin_va_start(v, l)
 #define va_end(v) __builtin_va_end(v)
 #define va_arg(v, l) __builtin_va_arg(v, l)

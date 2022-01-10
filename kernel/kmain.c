@@ -7,13 +7,41 @@
 
 #include <kernel/vga.h>
 #include <kernel/multiboot.h>
+#include <kernel/i386.h>
 
-multiboot_info_t* multiboot_info_ptr;
+multiboot_info_t* multiboot_info_ptr = 0;
 
 void kernel_main() {
+    cli();
+    // Setup vga early so we can print debug stuff to screen
     vga_initialize(VGA_COLOR_BLACK, VGA_COLOR_GREEN);
-    vga_putstr("Entering Termos\nKernel");
 
+    gdt_init();
+    idt_init();
+       
+    if (CHECK_MULTI_BOOT_FLAG(multiboot_info_ptr->flags, 6)) {
+        multiboot_memory_map_t *mmap = (multiboot_memory_map_t*)multiboot_info_ptr->mmap_addr;
+
+        vga_printf("mmap_addr = %#x, mmap_length = %#x\n",
+              (uint32_t)multiboot_info_ptr->mmap_addr, (uint32_t)multiboot_info_ptr->mmap_length);
+
+        for (; (unsigned long) mmap < multiboot_info_ptr->mmap_addr + multiboot_info_ptr->mmap_length;
+           mmap = (multiboot_memory_map_t *) ((unsigned long) mmap
+                                    + mmap->size + sizeof (mmap->size))) 
+        {
+            vga_printf(" base_addr = 0x%x%08x,"
+                " length = 0x%x%08x, type = 0x%x\n",
+                (uint32_t) (mmap->addr >> 32),
+                (uint32_t) (mmap->addr & 0xffffffff),
+                (uint32_t) (mmap->len >> 32),
+                (uint32_t) (mmap->len & 0xffffffff),
+                (uint32_t) mmap->type);
+        }
+    }
+
+    sti();
+
+    asm("int $10");
 
     for (;;) {
         asm("hlt");
