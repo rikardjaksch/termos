@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(TermOS C CXX ASM)
+project(TermOS C ASM)
 
 set(CROSS_COMPILER_BIN ${CMAKE_SOURCE_DIR}/cross_compiler/bin/bin)
 set(CROSS_COMPILER_PREFIX ${CROSS_COMPILER_BIN}/i686-elf-)

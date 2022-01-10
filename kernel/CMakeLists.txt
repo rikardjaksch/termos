@@ -1,8 +1,9 @@
 set(KERNEL_SOURCES
     boot/boot.S
-    entry_point.cpp
-    vga.cpp
-    io.cpp)
+    kmain.c
+    vga.c
+    io.c
+    kprintf.c)
 
 set(SOURCES
     ${KERNEL_SOURCES}
@@ -13,12 +14,20 @@ add_executable(kernel ${SOURCES})
 target_include_directories(kernel PUBLIC ${CMAKE_SOURCE_DIR})
 
 target_compile_options(kernel PUBLIC "-DKERNEL")
+target_compile_options(kernel PUBLIC "-std=gnu11")
 target_compile_options(kernel PUBLIC "-ffreestanding")
-target_compile_options(kernel PUBLIC "-fno-exceptions")
-target_compile_options(kernel PUBLIC "-fno-rtti")
+target_compile_options(kernel PUBLIC "-fbuiltin")
+target_compile_options(kernel PUBLIC "-nostdinc")
+target_compile_options(kernel PUBLIC "-nostdlib")
+target_compile_options(kernel PUBLIC "-Wextra")
+target_compile_options(kernel PUBLIC "-Wall")
+
+target_compile_options(kernel PUBLIC $<$<COMPILE_LANGUAGE:ASM>:-DASM_FILE>)
 
 target_link_options(kernel PUBLIC -T ${CMAKE_CURRENT_SOURCE_DIR}/linker.ld)
 target_link_options(kernel PUBLIC -nostdlib)
+target_link_options(kernel PUBLIC -ffreestanding)
+target_link_options(kernel PUBLIC -O2)
 
 target_link_libraries(kernel gcc)
 

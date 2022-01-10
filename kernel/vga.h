@@ -1,21 +1,19 @@
 #pragma once
 
-namespace vga {
-    enum class color {
-        Black,
-        Blue,
-        Green,
-        Cyan,
-        Red,
-        Magenta,
-        Brown,
-        LightGrey,
-        DarkGrey,
-    };
+typedef enum vga_color {
+    VGA_COLOR_BLACK,
+    VGA_COLOR_BLUE,
+    VGA_COLOR_GREEN,
+    VGA_COLOR_CYAN,
+    VGA_COLOR_RED,
+    VGA_COLOR_MAGENTA,
+    VGA_COLOR_BROWN,
+    VGA_COLOR_LIGHT_GRAY,
+    VGA_COLOR_DARK_GRAY,
+} vga_color_e;
 
-    void initialize(color bg, color fg);
-    void clear_screen();
-    void place_cursor(int x, int y);
-    void putch(unsigned char c);
-    void putch_at(char c, int x, int y);
-}
+void vga_initialize(vga_color_e bg, vga_color_e fg);
+void vga_clear_screen();
+void vga_putch(unsigned char c);
+void vga_putstr(const char* str);
+void vga_printf(const char* fmt, ...);
