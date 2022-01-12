@@ -3,6 +3,7 @@
  *  - Debug logging
  *  - GDT and IDT setup
  *  - Multiboot info structures
+ *  - Need to setup PIT to collect interrupt
  */
 
 #include <kernel/vga.h>
@@ -50,6 +51,5 @@ void kernel_main() {
     sti();
     
     for (;;) {
-              
     }
 }

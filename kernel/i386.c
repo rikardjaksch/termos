@@ -313,6 +313,10 @@ static void unimp_trap(){
     asm volatile("hlt");
 }
 
+static void pit_handler() {
+
+}
+
 void idt_init() {
     idtr.offset = idt_descriptors;
     idtr.size = (sizeof(descriptor_t) * 256);
@@ -338,6 +342,8 @@ void idt_init() {
     register_interrupt_handler(0, (uint32_t)exception_14_entry);
     register_interrupt_handler(0, (uint32_t)exception_15_entry);
     register_interrupt_handler(0, (uint32_t)exception_16_entry);
+
+    register_interrupt_handler(0x20, (uint32_t)pit_handler);
 
     remap_pic();
 
