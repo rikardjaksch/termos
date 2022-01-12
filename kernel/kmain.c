@@ -8,10 +8,17 @@
 #include <kernel/vga.h>
 #include <kernel/multiboot.h>
 #include <kernel/i386.h>
+#include <kernel/debug/log.h>
 
 multiboot_info_t* multiboot_info_ptr = 0;
 
 void kernel_main() {
+    klog_debug("Debug message\n");
+    klog_info("Info message\n");
+    klog_warning("Warning message\n");
+    klog_error("Error message\n");
+    klog_fatal("Fatal message\n");
+
     cli();
     
     gdt_init();

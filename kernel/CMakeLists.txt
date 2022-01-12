@@ -1,5 +1,6 @@
 set(KERNEL_SOURCES
     boot/boot.S
+    debug/log.c
     kmain.c
     kprintf.c
     vga.c
