@@ -29,3 +29,7 @@ void io_out16(uint16_t port, uint16_t value) {
 void io_out32(uint16_t port, uint32_t value) {
   asm("outl %%eax, %%dx"::"d"(port), "a"(value));
 }
+
+void io_wait() {
+    io_in8(0x80);
+}

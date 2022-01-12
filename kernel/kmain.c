@@ -13,11 +13,12 @@ multiboot_info_t* multiboot_info_ptr = 0;
 
 void kernel_main() {
     cli();
-    // Setup vga early so we can print debug stuff to screen
-    vga_initialize(VGA_COLOR_BLACK, VGA_COLOR_GREEN);
-
+    
     gdt_init();
     idt_init();
+
+    // Setup vga early so we can print debug stuff to screen
+    vga_initialize(VGA_COLOR_BLACK, VGA_COLOR_GREEN);
        
     if (CHECK_MULTI_BOOT_FLAG(multiboot_info_ptr->flags, 6)) {
         multiboot_memory_map_t *mmap = (multiboot_memory_map_t*)multiboot_info_ptr->mmap_addr;
@@ -41,9 +42,7 @@ void kernel_main() {
 
     sti();
     
-    vga_printf("After sti()");
-
     for (;;) {
-        asm("hlt");
+              
     }
 }
