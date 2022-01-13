@@ -1,9 +1,26 @@
 #pragma once
 
-/*
-typedef enum execption_type {
+#include <kernel/klibc/stdint.h>
 
-} execption_type_t;
+typedef enum exception_type {
+    EX_0,
+    EX_1,
+    EX_2,
+    EX_3,
+    EX_4,
+    EX_5,
+    EX_6,
+    EX_7,
+    EX_8,
+    EX_9,
+    EX_10,
+    EX_11,
+    EX_12,
+    EX_13,
+    EX_14,
+    EX_15,
+    EX_16,
+} exception_type_t;
 
 typedef enum irq_selector {
     IRQ_PIT,
@@ -24,29 +41,24 @@ typedef enum irq_selector {
     IRQ_SECONDARY_ATA,
 } irq_selector_t;
 
-typedef struct exception_data {
-    uint32 eax;
-    // ....
-} exception_data_t;
+struct interrupt_data {    
+    uint16_t gs, fs, es, ds;
+    uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;
+    uint32_t isr_vec, error_code;
+    uint32_t eip, cs, eflags, user_esp, ss;
+} __attribute__((packed));
+typedef struct interrupt_data interrupt_data_t;
 
-typedef struct irq_data {
-    uint32 eax;
-    // ....
-} irq_data_t;
-
-typedef void (*exception_handler_t)(exception_data_t*);
-typedef void (*irq_handler_t)(irq_data_t*);
-*/
+typedef void (*interrupt_handler_t)(interrupt_data_t);
 
 struct processor_api {
     void (*initialize)();
 
-    /*
-        void (register_exception_handler)(execption_type_t, exception_handler_t);
-        void (register_irq_handler)(irq_selector_t, irq_handler_t);
-    */
+    void (*register_exception_handler)(exception_type_t, interrupt_handler_t);
+    void (*register_irq_handler)(irq_selector_t, interrupt_handler_t);
 
-    void (*clear_interrupts)();
+    void (*disable_interrupts)();
+    void (*enable_interrupts)();
 };
 
 extern struct processor_api* processor_api;

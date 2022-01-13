@@ -7,7 +7,6 @@ set(KERNEL_SOURCES
     vga.c
     io.c
     i386.c
-    i386.S
     processor.c)
 
 set(KLIB_SOURCES
