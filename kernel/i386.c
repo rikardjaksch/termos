@@ -215,13 +215,13 @@ struct descriptor_table_pointer {
 } __attribute__((packed));
 typedef struct descriptor_table_pointer descriptor_table_pointer_t;
 
-static descriptor_table_pointer_t gdtr;
+//static descriptor_table_pointer_t gdtr;
 static descriptor_table_pointer_t idtr;
 
-static descriptor_t gdt_descriptors[5];
+//static descriptor_t gdt_descriptors[5];
 static descriptor_t idt_descriptors[256];
 
-void write_gdt_entry(uint32_t index, uint32_t base, uint32_t limit, uint8_t flags, uint8_t access) {
+/*void write_gdt_entry(uint32_t index, uint32_t base, uint32_t limit, uint8_t flags, uint8_t access) {
     descriptor_t* desc = &gdt_descriptors[index];
 
     desc->segment.flags = flags;
@@ -233,11 +233,11 @@ void write_gdt_entry(uint32_t index, uint32_t base, uint32_t limit, uint8_t flag
     desc->segment.base_low = (base & 0xffff);
     desc->segment.base_mid = (base >> 16) & 0xff;
     desc->segment.base_high = (base >> 24) & 0xff;
-}
+}*/
 
-void flush_gdt() {    
+/*void flush_gdt() {    
     asm("lgdt %0" :: "m"(gdtr):"memory");
-}
+}*/
 
 void flush_idt() {
     asm("lidt %0" :: "m"(idtr));
@@ -271,7 +271,7 @@ void remap_pic() {
 	io_out8(PIC2_DATA, a2);
 }
 
-void gdt_init() {
+/*void gdt_init() {
     write_gdt_entry(0, 0x0, 0x0, 0x0, 0x0);
     write_gdt_entry(1, 0x0, 0xffffffff, 0xc, 0x9a); // Kernel code segment
     write_gdt_entry(2, 0x0, 0xffffffff, 0xc, 0x92); // Kernel data segment
@@ -294,7 +294,7 @@ void gdt_init() {
       asm volatile(
         "ljmpl $0x8, $sanity\n"
         "sanity:\n");
-}
+}*/
 
 void register_interrupt_handler(uint8_t isr_number, uint32_t base) {
     descriptor_t* desc = &idt_descriptors[isr_number];
@@ -304,8 +304,6 @@ void register_interrupt_handler(uint8_t isr_number, uint32_t base) {
     desc->gate.offset_low = base & 0xffff;
     desc->gate.offset_high = (base >> 16) & 0xffff;
     desc->gate.type_attributes = 0x8e;
-
-    flush_idt();
 }
 
 static void unimp_trap(){
@@ -313,14 +311,17 @@ static void unimp_trap(){
     asm volatile("hlt");
 }
 
-static void pit_handler() {
-
+static void pit_handler() {    
+    vga_printf("Unhandled PIT.");
+    asm volatile("hlt");
 }
 
 void idt_init() {
     idtr.offset = idt_descriptors;
     idtr.size = (sizeof(descriptor_t) * 256);
     memset(idt_descriptors, 0, sizeof(descriptor_t) * 256);
+
+    flush_idt();
 
     for (uint8_t i = 0xff; i > 0x10; --i)
         register_interrupt_handler(i, (uint32_t)unimp_trap);
@@ -347,7 +348,7 @@ void idt_init() {
 
     remap_pic();
 
-    flush_idt();
+    
 }
 
 void handle_irq() {

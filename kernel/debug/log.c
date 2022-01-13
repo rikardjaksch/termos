@@ -34,9 +34,19 @@ void color_off() {
     io_out8(0xe9, 'm');
 }
 
-void klog_log(debug_log_type_e level, const char* fmt, ...) {
-    color_on(level);
+void print_header() {
+    static const char* kernel_header = "[KERNEL]: ";
+    static const uint32_t length = 10;
+    for (uint32_t i = 0; i < length; ++i) {
+        io_out8(0xe9, kernel_header[i]);
+    }
+}
 
+
+void klog_log(debug_log_type_e level, const char* fmt, ...) {
+    print_header();
+    color_on(level);
+    
     va_list ap;
     va_start(ap, fmt);
     printf_implementation(e9_putch, fmt, ap);

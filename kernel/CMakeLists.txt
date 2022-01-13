@@ -1,12 +1,14 @@
 set(KERNEL_SOURCES
     boot/boot.S
     debug/log.c
+    x86/descriptors.c
     kmain.c
     kprintf.c
     vga.c
     io.c
     i386.c
-    i386.S)
+    i386.S
+    processor.c)
 
 set(KLIB_SOURCES
     klibc/stdlib.c)
